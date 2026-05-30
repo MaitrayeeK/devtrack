@@ -98,6 +98,11 @@ const PRReviewTrendChart = dynamic(
   { ssr: false, loading: () => <SkeletonCard /> },
 );
 
+const ProductiveHoursWidget = dynamic(
+  () => import("@/components/ProductiveHoursWidget"),
+  { ssr: false, loading: () => <SkeletonCard /> },
+);
+
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/");
@@ -151,6 +156,7 @@ export default async function DashboardPage() {
           <div className="lg:col-span-2 flex flex-col gap-6">
             <ContributionGraph />
             <ContributionHeatmap />
+            <ProductiveHoursWidget />
           </div>
 
           {/* Right: streak + coding time */}
