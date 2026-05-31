@@ -126,6 +126,16 @@ create index if not exists idx_ai_insights_type    on ai_insights(insight_type);
 create unique index if not exists idx_ai_insights_user_type
   on ai_insights(user_id, insight_type);
 
+-- daily_notes schema--
+create table if not exists daily_notes (
+  id                    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id               text not null,
+  date                  date not null,
+  note                  text,
+  created_at            timestamptz default now(),
+  
+  UNIQUE(user_id, date)
+);
 create table if not exists user_github_achievements (
   user_id      text primary key references users(id) on delete cascade,
   github_login text not null,

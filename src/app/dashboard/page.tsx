@@ -105,6 +105,19 @@ const PRReviewTrendChart = dynamic(
   () => import("@/components/PRReviewTrendChart"),
   { ssr: false, loading: () => <SkeletonCard /> },
 );
+import WeeklySummaryCard from "@/components/WeeklySummaryCard";
+import { AIMentorWidget } from "@/components/AIMentorWidget";
+import ExportButton from "@/components/ExportButton";
+import Link from "next/link";
+import PersonalRecords from "@/components/PersonalRecords";
+import LocalCodingTime from "@/components/LocalCodingTime";
+import CodingTimeWidget from "@/components/CodingTimeWidget";
+import RecentActivity from "@/components/RecentActivity";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import DailyNoteWidget from "@/components/DailyNoteWidget";
+import DashboardSSEProvider from "@/components/DashboardSSEProvider";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -156,6 +169,53 @@ export default async function DashboardPage() {
           <div className="grid grid-cols-1 gap-6 w-full">
             <WeeklySummaryCard />
           </div>
+        </div>
+
+        {/* Friend comparison — full width, below the fold */}
+        <div className="mt-6">
+          <LazyWidget fallback={<SkeletonCard />}>
+            <FriendComparison />
+          </LazyWidget>
+        </div>
+
+        {/* Repo analytics explorer — full width */}
+        <div className="mt-6">
+          <LazyWidget fallback={<SkeletonCard />}>
+            <RepoAnalyticsExplorer />
+          </LazyWidget>
+        </div>
+
+        <div>
+          <DailyNoteWidget/>
+          <StreakTracker />
+          <LocalCodingTime />
+          <div className="mt-6">
+            <CodingTimeCard />
+          </div>
+        {/* Row 2: PR metrics, community metrics, PR breakdown & Time Chart */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        {/* ── Row 2: PR metrics + Community metrics ── */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <PRMetrics />
+          <CommunityMetrics />
+        </div>
+
+        {/* PR breakdown + commit time — 2-col so charts have room */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <LazyWidget fallback={<SkeletonCard />}>
+            <PRBreakdownChart />
+          </LazyWidget>
+          <LazyWidget fallback={<SkeletonCard />}>
+            <CommitTimeChart />
+          </LazyWidget>
+        </div>
+
+        {/* Activity ring — full width */}
+        <div className="mt-6">
+          <LazyWidget fallback={<SkeletonCard />}>
+            <ActivityRingChart />
+          </LazyWidget>
+        </div>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
             <div className="flex flex-col gap-6 w-full overflow-hidden">
               <PersonalRecords />
